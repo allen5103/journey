@@ -2,9 +2,9 @@
 
 > **手機優先的單一 HTML 旅程規劃工具。** 建立旅程、安排每日活動、保存景點照片、管理地圖位置，並將完整行程以 JSON 備份帶著走。
 
-[開啟公開版本](https://allen5103.github.io/journey/) · [查看最新版本](https://allen5103.github.io/journey/?v=1.5.1)
+[開啟公開版本](https://allen5103.github.io/journey/) · [查看最新版本](https://allen5103.github.io/journey/?v=1.5.2)
 
-目前公開版本：**v1.5.1**。請在應用程式的「設定」頁查看實際載入的版本號。
+目前公開版本：**v1.5.2**。請在應用程式的「設定」頁查看實際載入的版本號。
 
 ## 目錄
 
