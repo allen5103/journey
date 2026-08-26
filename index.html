@@ -119,7 +119,7 @@
       ];
       const COLORS = PANTONE_COLORS.map((color) => color.hex);
       const CATEGORIES = ["景點", "餐飲", "交通", "住宿", "購物", "其他"];
-      const APP_VERSION = "1.5.1";
+      const APP_VERSION = "1.5.2";
       const IMAGE_DB_NAME = "journey-offline-images-v1";
       const IMAGE_STORE_NAME = "images";
       const IMAGE_MAX_EDGE = 2048;
@@ -255,6 +255,8 @@
       window.exportAll = async () => { try { const trips = await tripsForExport(state.trips); download(JSON.stringify({ format:"journey-offline/v3", exportedAt:new Date().toISOString(), trips },null,2),"journey-all-backup.json"); toast("全部旅程備份檔已產生"); } catch (error) { toast(error instanceof Error ? `匯出失敗：${error.message}` : "匯出失敗，請稍後再試。",4200); } };
       const saveActivityWithCategory = window.saveActivity;
       window.saveActivity = async (event,...args) => { const category = event.currentTarget?.elements?.category; if (category && !CATEGORIES.includes(category.value)) category.value = "其他"; return saveActivityWithCategory(event,...args); };
+      const renderSettingsWithReadme = renderSettings;
+      renderSettings = () => renderSettingsWithReadme().replace("</section>", `<div class="settings-card"><a class="setting-row" href="https://github.com/allen5103/journey#readme" target="_blank" rel="noopener noreferrer" aria-label="在新分頁開啟 GitHub README 功能說明書"><span>功能說明書（GitHub README）</span><span>↗</span></a><div class="setting-note">查看完整功能、操作步驟、備份方式、照片儲存與離線使用說明。</div></div></section>`);
       render();
       migrateLegacyImages();
     })();
