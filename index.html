@@ -38,9 +38,9 @@
     .empty { align-items:center; display:flex; flex-direction:column; min-height:360px; justify-content:center; padding:30px 18px; text-align:center; }
     .empty-mark { align-items:center; background:#E8F0FA; border-radius:26px; color:var(--blue); display:flex; font-size:28px; height:68px; justify-content:center; margin-bottom:18px; width:68px; }
     .empty p { color:var(--muted); font-size:15px; line-height:1.55; margin-top:8px; max-width:290px; }
-    .tabs { backdrop-filter:blur(16px); background:rgba(255,255,255,.94); border-top:1px solid #E1E7ED; bottom:0; display:grid; grid-template-columns:repeat(3,1fr); left:0; padding:9px 10px calc(env(safe-area-inset-bottom) + 8px); position:fixed; right:0; z-index:20; }
-    .tabs-wrap { margin:0 auto; max-width:600px; width:100%; display:grid; grid-template-columns:repeat(3,1fr); }
-    .tab { background:transparent; color:#7B8997; font-size:12px; font-weight:800; min-height:52px; }
+    .tabs { backdrop-filter:blur(16px); background:rgba(255,255,255,.94); border-top:1px solid #E1E7ED; bottom:0; display:flex; left:0; padding:9px 10px calc(env(safe-area-inset-bottom) + 8px); position:fixed; right:0; z-index:20; }
+    .tabs-wrap { display:flex; justify-content:space-around; margin:0 auto; max-width:600px; width:100%; }
+    .tab { background:transparent; color:#7B8997; flex:1 1 33.333%; font-size:12px; font-weight:800; min-height:52px; }
     .tab.active { color:var(--blue); }
     .tab span { display:block; font-size:18px; line-height:23px; }
     .trip-hero { border-radius:25px; color:#fff; margin:10px 0 0; padding:21px; }
