@@ -100,7 +100,7 @@
     (() => {
       const STORAGE_KEY = "journey-offline-html-v1";
       const MAPS_BROWSER_KEY = "AIzaSyAgEXiJ7kJ541OekLUBojvLrWyr9MXO94I";
-      const MAPS_ENABLED = location.protocol !== "file:" && MAPS_BROWSER_KEY !== "AIzaSyAgEXiJ7kJ541OekLUBojvLrWyr9MXO94I";
+      const MAPS_ENABLED = location.protocol !== "file:" && !MAPS_BROWSER_KEY.startsWith("__GOOGLE_MAPS_");
       let mapsLoader = null;
       const PANTONE_COLORS = [
         { year:2026, name:"Cloud Dancer", code:"11-4201", hex:"#F0EEE9" },
