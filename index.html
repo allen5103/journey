@@ -114,6 +114,19 @@
   .activity-actions { align-items:center; flex:0 0 40px; gap:4px; }
   .activity-actions .category { align-items:center; display:flex; height:30px; justify-content:center; min-height:30px; padding:0; width:30px; white-space:nowrap; }
 </style>
+<style>
+  /* v1.7.3：行程列表卡片跟隨所屬旅程色彩，並將含照片的資訊列垂直置中。 */
+  .activity { --trip-color:var(--teal); --trip-color-ink:#FFFFFF; }
+  .activity.current { background:color-mix(in srgb,var(--trip-color) 18%,#FFFFFF); border-color:var(--trip-color); }
+  .state-pill.current,.activity .category,.time-range { background:var(--trip-color); color:var(--trip-color-ink); }
+  .dot.current,.check.done { background:var(--trip-color); border-color:var(--trip-color); }
+  .activity-main { align-items:stretch; }
+  .activity-main .check { align-self:center; margin-top:0; }
+  .activity-copy { align-self:stretch; display:flex; flex-direction:column; justify-content:center; }
+  .activity-actions { align-self:stretch; justify-content:center; }
+  .activity-main.has-photo .photo-button { align-self:stretch; display:flex; }
+  .activity-main.has-photo .photo { height:100%; min-height:96px; width:72px; }
+</style>
 <body>
   <main id="app" class="phone" aria-live="polite"></main>
   <div id="modal" class="modal" aria-hidden="true"><div id="sheet" class="sheet"></div></div>
@@ -140,7 +153,7 @@
       const COLORS = PANTONE_COLORS.map((color) => color.hex);
       const DEFAULT_TRIP_COLOR = "#CAD3C1";
       const CATEGORIES = ["景點", "餐飲", "交通", "住宿", "購物", "其他"];
-      const APP_VERSION = "1.7.2";
+      const APP_VERSION = "1.7.3";
       const IMAGE_DB_NAME = "journey-offline-images-v1";
       const IMAGE_STORE_NAME = "images";
       const IMAGE_MAX_EDGE = 2048;
@@ -292,9 +305,9 @@
           : firstImageData
             ? `<img class="photo" alt="${esc(item.title)}照片縮圖" src="${firstImageData}" />`
             : "";
-        return `<article class="activity ${kind}" data-device-target="${kind ? "true" : "false"}">
+        return `<article class="activity ${kind}" data-device-target="${kind ? "true" : "false"}" style="--trip-color:${esc(trip.color)};--trip-color-ink:${contrastColor(trip.color)}">
           ${kind ? `<div class="state-pill ${kind}"><span class="dot ${kind}"></span>${kind === "current" ? "現在進行中" : "下一個行程"}</div>` : ""}
-          <div class="activity-main">
+          <div class="activity-main ${imageMarkup ? "has-photo" : ""}">
             <button class="check ${item.completed ? "done" : ""}" onclick="window.toggleActivity('${trip.id}','${item.id}')">${item.completed ? "✓" : ""}</button>
             ${imageMarkup ? `<button class="photo-button" type="button" aria-label="查看${esc(item.title)}所有照片" onclick="window.openPhotoViewer('${trip.id}','${item.id}',0)">${imageMarkup}</button>` : ""}
             <div class="activity-copy">
