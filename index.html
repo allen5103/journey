@@ -109,6 +109,11 @@
     body.is-offline .offline-network-note { color:var(--muted); display:inline; }
   </style>
 </head>
+<style>
+  /* v1.7.2：三個行程控制項使用相同高度及固定垂直間距。 */
+  .activity-actions { align-items:center; flex:0 0 40px; gap:4px; }
+  .activity-actions .category { align-items:center; display:flex; height:30px; justify-content:center; min-height:30px; padding:0; width:30px; white-space:nowrap; }
+</style>
 <body>
   <main id="app" class="phone" aria-live="polite"></main>
   <div id="modal" class="modal" aria-hidden="true"><div id="sheet" class="sheet"></div></div>
@@ -135,7 +140,7 @@
       const COLORS = PANTONE_COLORS.map((color) => color.hex);
       const DEFAULT_TRIP_COLOR = "#CAD3C1";
       const CATEGORIES = ["景點", "餐飲", "交通", "住宿", "購物", "其他"];
-      const APP_VERSION = "1.7.0";
+      const APP_VERSION = "1.7.1";
       const IMAGE_DB_NAME = "journey-offline-images-v1";
       const IMAGE_STORE_NAME = "images";
       const IMAGE_MAX_EDGE = 2048;
@@ -274,6 +279,35 @@
       window.exportAll = async () => { try { const trips = await tripsForExport(state.trips); download(JSON.stringify({ format:"journey-offline/v3", exportedAt:new Date().toISOString(), trips },null,2),"journey-all-backup.json"); toast("全部旅程備份檔已產生"); } catch (error) { toast(error instanceof Error ? `匯出失敗：${error.message}` : "匯出失敗，請稍後再試。",4200); } };
       const saveActivityWithCategory = window.saveActivity;
       window.saveActivity = async (event,...args) => { const category = event.currentTarget?.elements?.category; if (category && !CATEGORIES.includes(category.value)) category.value = "其他"; return saveActivityWithCategory(event,...args); };
+      function renderActivity(trip,item,next,target,activeDate) {
+        const kind = target?.date === activeDate && target.id === item.id ? target.kind : "";
+        const gap = next ? gapMinutes(item,next) : 0;
+        const hasMap = validCoordinates(item.latitude,item.longitude);
+        const imageIds = activityImageIds(item);
+        const legacy = legacyImageDataList(item);
+        const firstImageId = imageIds[0];
+        const firstImageData = legacy[0];
+        const imageMarkup = firstImageId
+          ? `<img class="photo" alt="${esc(item.title)}照片縮圖" data-image-id="${esc(firstImageId)}" />`
+          : firstImageData
+            ? `<img class="photo" alt="${esc(item.title)}照片縮圖" src="${firstImageData}" />`
+            : "";
+        return `<article class="activity ${kind}" data-device-target="${kind ? "true" : "false"}">
+          ${kind ? `<div class="state-pill ${kind}"><span class="dot ${kind}"></span>${kind === "current" ? "現在進行中" : "下一個行程"}</div>` : ""}
+          <div class="activity-main">
+            <button class="check ${item.completed ? "done" : ""}" onclick="window.toggleActivity('${trip.id}','${item.id}')">${item.completed ? "✓" : ""}</button>
+            ${imageMarkup ? `<button class="photo-button" type="button" aria-label="查看${esc(item.title)}所有照片" onclick="window.openPhotoViewer('${trip.id}','${item.id}',0)">${imageMarkup}</button>` : ""}
+            <div class="activity-copy">
+              <div class="activity-title-row"><div class="activity-title ${item.completed ? "done" : ""}">${esc(item.title)}</div></div>
+              <p class="activity-place">${esc(item.place || "未設定地點")}</p>
+              ${item.notes ? `<p class="activity-notes">${linkifyNotes(item.notes)}</p>` : ""}
+            </div>
+            <div class="activity-actions"><span class="category">${esc(item.category)}</span><button class="mini" aria-label="編輯行程" onclick="window.openActivityForm('${trip.id}','${item.id}')">${svgIcon("edit")}</button><button class="mini" aria-label="刪除行程" onclick="window.deleteActivity('${trip.id}','${item.id}')">${svgIcon("trash")}</button></div>
+          </div>
+          <div class="time-range">時間　${timeRange(item)}</div>
+          ${hasMap ? `<div class="activity-map" data-activity-map data-lat="${Number(item.latitude)}" data-lng="${Number(item.longitude)}" data-label="${esc(item.mapSearch || item.place || item.title)}"></div><a class="map-open" href="${mapsUrl(item)}" target="_blank" rel="noopener noreferrer">在 Google Maps 開啟</a>` : ""}
+        </article>${gap ? `<div class="gap">空檔 ${gapLabel(gap)}</div>` : ""}`;
+      }
       const renderSettingsWithReadme = renderSettings;
       renderSettings = () => renderSettingsWithReadme().replace("</section>", `<div class="settings-card"><a class="setting-row" href="https://github.com/allen5103/journey#readme" target="_blank" rel="noopener noreferrer" aria-label="在新分頁開啟 GitHub README 功能說明書"><span>功能說明書（GitHub README）</span><span>↗</span></a><div class="setting-note">查看完整功能、操作步驟、備份方式、照片儲存與離線使用說明。</div></div></section>`);
       window.addEventListener("online",syncConnectivity);
