@@ -26,9 +26,9 @@
     .icon-button.danger { color:var(--danger); }
     .detail-toolbar { align-items:center; display:flex; gap:10px; justify-content:space-between; }
     .detail-toolbar .row { gap:8px; }
-    .detail-toolbar .icon-button { background:#fff; border:1px solid var(--line); border-radius:15px; box-shadow:0 3px 8px rgba(38,55,45,.05); transition:background .16s,border-color .16s,box-shadow .16s,transform .16s; }
-    .detail-toolbar .detail-back,.detail-toolbar .detail-export,.detail-toolbar .detail-edit,.detail-toolbar .detail-delete { color:var(--trip-color); }
-    .detail-toolbar .icon-button:focus-visible { outline:3px solid var(--trip-color-ink); outline-offset:2px; }
+    .detail-toolbar .icon-button { background:#fff; border:1px solid var(--line); border-radius:15px; box-shadow:0 3px 8px rgba(38,55,45,.05); height:34px; padding:0 11px; transition:background .16s,border-color .16s,box-shadow .16s,transform .16s; }
+    .detail-toolbar .detail-back,.detail-toolbar .detail-export,.detail-toolbar .detail-edit,.detail-toolbar .detail-delete { color:var(--ink); }
+    .detail-toolbar .icon-button:focus-visible { outline:3px solid var(--blue); outline-offset:2px; }
     @media (hover:hover) { .detail-toolbar .icon-button:hover { background:var(--soft-blue); border-color:#BACAB7; box-shadow:0 4px 10px rgba(38,55,45,.08); } }
     .primary { align-items:center; background:var(--blue); border-radius:15px; color:#fff; display:flex; font-size:16px; font-weight:800; gap:7px; justify-content:center; min-height:54px; padding:12px 16px; width:100%; }
     .secondary { background:var(--soft-blue); border-radius:13px; color:var(--blue); font-size:14px; font-weight:800; min-height:44px; padding:10px 14px; }
@@ -127,7 +127,7 @@
       const COLORS = PANTONE_COLORS.map((color) => color.hex);
       const DEFAULT_TRIP_COLOR = "#CAD3C1";
       const CATEGORIES = ["景點", "餐飲", "交通", "住宿", "購物", "其他"];
-      const APP_VERSION = "1.6.4";
+      const APP_VERSION = "1.6.5";
       const IMAGE_DB_NAME = "journey-offline-images-v1";
       const IMAGE_STORE_NAME = "images";
       const IMAGE_MAX_EDGE = 2048;
