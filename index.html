@@ -112,19 +112,19 @@
       const MAPS_ENABLED = location.protocol !== "file:" && !MAPS_BROWSER_KEY.startsWith("__GOOGLE_MAPS_");
       let mapsLoader = null;
       const PANTONE_COLORS = [
+        { name:"Almost Aqua", code:"13-6006", hex:"#CAD3C1" },
         { name:"Lemon Icing", code:"11-0515", hex:"#F6EBC8" },
         { name:"Nimbus Cloud", code:"13-4108", hex:"#D5D5D8" },
         { name:"Raindrops on Roses", code:"11-1400", hex:"#EBD8DB" },
         { name:"Cloud Dancer", code:"11-4201", hex:"#F0EEE9" },
         { name:"Ice Melt", code:"13-4306", hex:"#C9DCE8" },
-        { name:"Almost Aqua", code:"13-6006", hex:"#CAD3C1" },
         { name:"Orchid Tint", code:"13-3802", hex:"#DBD2DB" },
         { name:"Peach Dust", code:"12-1107", hex:"#F0D8CC" }
       ];
       const COLORS = PANTONE_COLORS.map((color) => color.hex);
-      const DEFAULT_TRIP_COLOR = "#F0EEE9";
+      const DEFAULT_TRIP_COLOR = "#CAD3C1";
       const CATEGORIES = ["景點", "餐飲", "交通", "住宿", "購物", "其他"];
-      const APP_VERSION = "1.6.2";
+      const APP_VERSION = "1.6.3";
       const IMAGE_DB_NAME = "journey-offline-images-v1";
       const IMAGE_STORE_NAME = "images";
       const IMAGE_MAX_EDGE = 2048;
