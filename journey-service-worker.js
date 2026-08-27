@@ -1,4 +1,4 @@
-const CACHE_NAME = "journey-shell-v1.7.4";
+const CACHE_NAME = "journey-shell-v1.7.5";
 const APP_SHELL = ["./", "./index.html"];
 
 self.addEventListener("install", (event) => {

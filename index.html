@@ -158,7 +158,7 @@
       const COLORS = PANTONE_COLORS.map((color) => color.hex);
       const DEFAULT_TRIP_COLOR = "#CAD3C1";
       const CATEGORIES = ["景點", "餐飲", "交通", "住宿", "購物", "其他"];
-      const APP_VERSION = "1.7.4";
+      const APP_VERSION = "1.7.5";
       const IMAGE_DB_NAME = "journey-offline-images-v1";
       const IMAGE_STORE_NAME = "images";
       const IMAGE_MAX_EDGE = 2048;
@@ -295,6 +295,12 @@
       async function tripsForExport(trips) { const exportedTrips = []; for (const trip of trips) { const activities = []; for (const activity of trip.activities) { const imageData = []; for (const imageId of activityImageIds(activity)) { const blob = await getImage(imageId); if (!blob) throw new Error(`找不到「${activity.title || "未命名行程"}」的圖片，請先移除或重新選擇圖片。`); imageData.push(await blobToDataUrl(blob)); } imageData.push(...legacyImageDataList(activity)); activities.push({ ...withoutActivityImages(activity), imageData }); } exportedTrips.push({ ...trip, activities }); } return exportedTrips; }
       window.exportTrip = async (id) => { const trip = state.trips.find((item) => item.id === id); if (!trip) return; try { const trips = await tripsForExport([trip]); download(JSON.stringify({ format:"journey-offline/v3", exportedAt:new Date().toISOString(), trips },null,2),`journey-${trip.name.replace(/[^\w\u4e00-\u9fff-]+/g,"-") || "backup"}.json`); toast("備份檔已產生"); } catch (error) { toast(error instanceof Error ? `匯出失敗：${error.message}` : "匯出失敗，請稍後再試。",4200); } };
       window.exportAll = async () => { try { const trips = await tripsForExport(state.trips); download(JSON.stringify({ format:"journey-offline/v3", exportedAt:new Date().toISOString(), trips },null,2),"journey-all-backup.json"); toast("全部旅程備份檔已產生"); } catch (error) { toast(error instanceof Error ? `匯出失敗：${error.message}` : "匯出失敗，請稍後再試。",4200); } };
+      const renderMapCanvasWithReset = renderMapCanvas;
+      renderMapCanvas = (canvas,latitude,longitude,label) => { canvas.replaceChildren(); canvas.classList.remove("empty"); return renderMapCanvasWithReset(canvas,latitude,longitude,label); };
+      const activityFormWithMapClearButton = activityForm;
+      activityForm = (trip,activity) => activityFormWithMapClearButton(trip,activity).replace('<div class="map-canvas" data-form-map></div>','<div class="map-canvas" data-form-map></div><button type="button" data-clear-map-info style="color:var(--blue);font-size:12px;font-weight:800;margin-top:9px;padding:6px 0;text-decoration:underline;text-underline-offset:3px">清除 Google Maps 資訊</button><div class="photo-help">只會清除地圖搜尋、地點識別碼與座標；純文字地點會保留。清除後請按儲存更新。</div>');
+      const setupActivityMapControlsWithMapClear = setupActivityMapControls;
+      setupActivityMapControls = (root) => { setupActivityMapControlsWithMapClear(root); const form = root.querySelector("[data-activity-form]"); const clearButton = form?.querySelector("[data-clear-map-info]"); clearButton?.addEventListener("click",() => { form.elements.mapSearch.value = ""; form.elements.latitude.value = ""; form.elements.longitude.value = ""; form.elements.placeId.value = ""; renderMapCanvas(form.querySelector("[data-form-map]"),"","",""); const status = form.querySelector("[data-map-status]"); status.textContent = "已清除 Google Maps 資訊；純文字地點會保留，請按儲存更新。"; form.elements.mapSearch.focus(); }); };
       const saveActivityWithCategory = window.saveActivity;
       window.saveActivity = async (event,...args) => { const category = event.currentTarget?.elements?.category; if (category && !CATEGORIES.includes(category.value)) category.value = "其他"; return saveActivityWithCategory(event,...args); };
       function renderActivity(trip,item,next,target,activeDate) {
